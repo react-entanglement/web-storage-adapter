@@ -8,7 +8,7 @@ module.exports = {
    *
    * Example: 'index' -> 'index.html' and 'index.js'
    */
-  pages: ['index'],
+  pages: ['index', 'source', 'target'],
 
   /**
    * List of Sagui plugins to disable

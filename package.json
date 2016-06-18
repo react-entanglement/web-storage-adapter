@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/react-entanglement/web-storage-adapter/issues"
   },
-  "homepage": "https://github.com/react-entanglement/web-storage-adapter#readme"
+  "homepage": "https://github.com/react-entanglement/web-storage-adapter#readme",
+  "devDependencies": {
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-entanglement": "^0.3.2",
+    "sagui": "^4.4.1"
+  }
 }
