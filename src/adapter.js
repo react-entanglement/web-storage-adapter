@@ -10,6 +10,9 @@ const set = (action, name, data) =>
 const remove = (action, name) =>
   localStorage.removeItem(key(action, name))
 
+const get = (action, name) =>
+  localStorage.getItem(key(action, name))
+
 const on = (callback) =>
   window.addEventListener('storage', callback)
 
@@ -48,6 +51,13 @@ export default {
   },
 
   onRender: (componentName, cb) => {
+    // First load, show if necessary
+    if (get('render', componentName) != null) {
+      const { data, handlerNames } = JSON.parse(get('render', componentName))
+
+      cb(data, handlerNames)
+    }
+
     const listener = (e) => {
       if (
         e.key === key('render', componentName) &&
