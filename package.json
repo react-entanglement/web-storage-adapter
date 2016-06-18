@@ -1,0 +1,25 @@
+{
+  "name": "react-entanglement-web-storage-adapter",
+  "version": "1.0.0",
+  "description": "WIP",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run develop",
+    "test": "NODE_ENV=test sagui test",
+    "test-watch": "NODE_ENV=test sagui test --watch",
+    "develop": "sagui develop",
+    "build": "sagui build",
+    "dist": "NODE_ENV=production sagui dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-entanglement/web-storage-adapter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/react-entanglement/web-storage-adapter/issues"
+  },
+  "homepage": "https://github.com/react-entanglement/web-storage-adapter#readme"
+}
