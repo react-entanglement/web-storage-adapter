@@ -38,7 +38,7 @@ export default (prefix, storage = window.localStorage, w = window) => {
     },
 
     onRender: (componentName, callback) => {
-      // First load, show if necessary
+      // Render immediately if necessary
       if (get(key('render', componentName)) != null) {
         const { data, handlerNames } = JSON.parse(
           get(key('render', componentName))

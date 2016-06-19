@@ -1,8 +1,8 @@
 import adapter from './index'
 import { deepEqual, equal, ok } from 'assert'
 
-const getStorageStub = () => ({
-  getItem: function self (key) { self.key = key },
+const getStorageStub = (storage) => ({
+  getItem: function self (key) { self.key = key; return storage && storage[key] },
   setItem: function self (key, value) { self[key] = value },
   removeItem: function self (key) { self.key = key }
 })
@@ -43,13 +43,41 @@ describe('react-entanglement-web-storage-adapter', () => {
     })
 
     describe('onHandle', () => {
-      it('sets up a listener')
+      const storageStub = getStorageStub()
+      const windowStub = getWindowStub()
+      const theAdapter = adapter('app', storageStub, windowStub)
+      const handler = function self (args) { self.args = args }
 
-      it('returns a function to unset the listener')
+      const deListener = theAdapter.onHandle('component', 'onTouch', handler)
+
+      it('sets up a listener', () => {
+        ok(typeof windowStub.addEventListener['storage'] === 'function')
+      })
+
+      it('returns a function to unset the listener', () => {
+        equal(windowStub.removeEventListener['storage'], undefined)
+
+        deListener()
+        equal(
+          windowStub.removeEventListener['storage'],
+          windowStub.addEventListener['storage']
+        )
+      })
 
       describe('listener', () => {
         describe('if key matches component handle, the handlerName and there is data in storage for it', () => {
-          it('runs the callback with the args from the storage data')
+          it('runs the callback with the args from the event data', () => {
+            const listener = windowStub.addEventListener['storage']
+
+            listener({
+              key: 'app:handle:component:onTouch',
+              newValue: JSON.stringify({
+                args: { the: 'args' }
+              })
+            })
+
+            deepEqual(handler.args, { the: 'args' })
+          })
         })
       })
     })
@@ -57,29 +85,108 @@ describe('react-entanglement-web-storage-adapter', () => {
 
   describe('<Materialize>', () => {
     describe('onUnmount', () => {
-      it('sets up a listener')
+      const storageStub = getStorageStub()
+      const windowStub = getWindowStub()
+      const theAdapter = adapter('app', storageStub, windowStub)
+      const handler = function self () { self.called = true }
 
-      it('returns a function to unset the listener')
+      const deListener = theAdapter.onUnmount('component', handler)
+
+      it('sets up a listener', () => {
+        ok(typeof windowStub.addEventListener['storage'] === 'function')
+      })
+
+      it('returns a function to unset the listener', () => {
+        equal(windowStub.removeEventListener['storage'], undefined)
+
+        deListener()
+
+        equal(
+          windowStub.removeEventListener['storage'],
+          windowStub.addEventListener['storage']
+        )
+      })
 
       describe('listener', () => {
         describe('if key matches component render and there is no value in storage for it', () => {
-          it('runs the callback')
+          it('runs the callback', () => {
+            const listener = windowStub.addEventListener['storage']
+
+            listener({
+              key: 'app:render:component',
+              newValue: null
+            })
+
+            ok(handler.called)
+          })
         })
       })
     })
 
     describe('onRender', () => {
-      it('sets up a listener')
+      const storageStub = getStorageStub()
+      const windowStub = getWindowStub()
+      const theAdapter = adapter('app', storageStub, windowStub)
+      const handler = function self (data, handlerNames) {
+        self.data = data
+        self.handlerNames = handlerNames
+      }
 
-      it('returns a function to unset the listener')
+      const deListener = theAdapter.onRender('component', handler)
+
+      it('sets up a listener', () => {
+        ok(typeof windowStub.addEventListener['storage'] === 'function')
+      })
+
+      it('returns a function to unset the listener', () => {
+        equal(windowStub.removeEventListener['storage'], undefined)
+
+        deListener()
+
+        equal(
+          windowStub.removeEventListener['storage'],
+          windowStub.addEventListener['storage']
+        )
+      })
 
       describe('if there is a record for rendering this component in storage', () => {
-        it('runs the callback with data and handlerNames from storage')
+        const storageStub = getStorageStub({
+          'app:render:component': JSON.stringify({
+            data: { the: 'data' },
+            handlerNames: { the: 'handlerNames' }
+          })
+        })
+        const windowStub = getWindowStub()
+        const theAdapter = adapter('app', storageStub, windowStub)
+        const handler = function self (data, handlerNames) {
+          self.data = data
+          self.handlerNames = handlerNames
+        }
+
+        theAdapter.onRender('component', handler)
+
+        it('runs the callback with data and handlerNames from storage', () => {
+          deepEqual(handler.data, { the: 'data' })
+          deepEqual(handler.handlerNames, { the: 'handlerNames' })
+        })
       })
 
       describe('listener', () => {
-        describe('if key matches component render and there is data in storage for it', () => {
-          it('runs the callback with data and handlerNames from storage')
+        describe('if key matches component render and there is data in the event for it', () => {
+          it('runs the callback with data and handlerNames from the event', () => {
+            const listener = windowStub.addEventListener['storage']
+
+            listener({
+              key: 'app:render:component',
+              newValue: JSON.stringify({
+                data: { the: 'data' },
+                handlerNames: { the: 'handlerNames' }
+              })
+            })
+
+            deepEqual(handler.data, { the: 'data' })
+            deepEqual(handler.handlerNames, { the: 'handlerNames' })
+          })
         })
       })
     })
