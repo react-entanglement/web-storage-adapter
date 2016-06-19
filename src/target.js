@@ -8,7 +8,7 @@ render(
   <Materialize
     name='MagicForm'
     component={MagicForm}
-    adapter={adapter}
+    adapter={adapter('web-storage-adapter-demo')}
   />
   , document.getElementById('main')
 )

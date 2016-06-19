@@ -5,7 +5,7 @@ import Entanglement from 'react-entanglement'
 import StateContainer from './components/StateContainer'
 
 render(
-  <Entanglement adapter={adapter}>
+  <Entanglement adapter={adapter('web-storage-adapter-demo')}>
     <StateContainer />
   </Entanglement>
   , document.getElementById('main')
