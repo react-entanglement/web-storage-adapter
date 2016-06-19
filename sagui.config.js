@@ -10,6 +10,8 @@ module.exports = {
    */
   pages: ['index', 'source', 'target'],
 
+  library: 'ReactEntanglementWebStorageAdapter',
+
   /**
    * List of Sagui plugins to disable
    */
