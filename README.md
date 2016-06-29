@@ -1,8 +1,7 @@
 # WebStorage adapter for React Entanglement
 [![Build Status](https://travis-ci.org/react-entanglement/web-storage-adapter.svg)](https://travis-ci.org/react-entanglement/web-storage-adapter)
+[![npm version](https://badge.fury.io/js/react-entanglement-web-storage-adapter.svg)](https://badge.fury.io/js/react-entanglement-web-storage-adapter)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
-
-**NOTE: THIS IS NOT AVAILABLE YET**
 
 ## Usage
 
