@@ -8,7 +8,7 @@ module.exports = {
    *
    * Example: 'index' -> 'index.html' and 'index.js'
    */
-  pages: ['demo', 'source', 'target'],
+  pages: ['example/index', 'example/source', 'example/target'],
 
   library: 'ReactEntanglementWebStorageAdapter',
 

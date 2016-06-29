@@ -3,8 +3,8 @@ import { render } from 'react-dom'
 
 render(
   <div>
-    <iframe src='source.html' />
-    <iframe src='target.html' />
+    <iframe src='/example/source.html' />
+    <iframe src='/example/target.html' />
   </div>
   , document.getElementById('main')
 )

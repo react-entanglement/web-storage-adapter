@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Materialize } from 'react-entanglement'
-import adapter from './index'
+import adapter from '../index'
 import MagicForm from './components/MagicForm'
 
 render(
