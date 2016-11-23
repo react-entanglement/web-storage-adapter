@@ -12,14 +12,14 @@ const getWindowStub = () => ({
 })
 
 describe('react-entanglement-web-storage-adapter', () => {
-  describe('<Scatter>', () => {
+  describe('scatterer', () => {
     describe('unmount', () => {
       const storageStub = getStorageStub()
       const windowStub = getWindowStub()
       const theAdapter = adapter('app', storageStub, windowStub)
 
       it('removes the render of the component', () => {
-        theAdapter.unmount('component')
+        theAdapter.scatterer.unmount('component')
 
         equal(storageStub.removeItem.key, 'app:render:component')
       })
@@ -33,7 +33,7 @@ describe('react-entanglement-web-storage-adapter', () => {
       it('sets the data and handlerNames for the component', () => {
         const data = { the: 'data' }
         const handlerNames = { the: 'handlerNames' }
-        theAdapter.render('component', data, handlerNames)
+        theAdapter.scatterer.render('component', data, handlerNames)
 
         deepEqual(
           JSON.parse(storageStub.setItem['other-app:render:component']),
@@ -42,13 +42,13 @@ describe('react-entanglement-web-storage-adapter', () => {
       })
     })
 
-    describe('onHandle', () => {
+    describe('addHandlerListener', () => {
       const storageStub = getStorageStub()
       const windowStub = getWindowStub()
       const theAdapter = adapter('app', storageStub, windowStub)
       const handler = function self (args) { self.args = args }
 
-      const deListener = theAdapter.onHandle('component', 'onTouch', handler)
+      const deListener = theAdapter.scatterer.addHandlerListener('component', 'onTouch', handler)
 
       it('sets up a listener', () => {
         ok(typeof windowStub.addEventListener['storage'] === 'function')
@@ -83,14 +83,14 @@ describe('react-entanglement-web-storage-adapter', () => {
     })
   })
 
-  describe('<Materialize>', () => {
-    describe('onUnmount', () => {
+  describe('materializer', () => {
+    describe('addUnmountListener', () => {
       const storageStub = getStorageStub()
       const windowStub = getWindowStub()
       const theAdapter = adapter('app', storageStub, windowStub)
       const handler = function self () { self.called = true }
 
-      const deListener = theAdapter.onUnmount('component', handler)
+      const deListener = theAdapter.materializer.addUnmountListener('component', handler)
 
       it('sets up a listener', () => {
         ok(typeof windowStub.addEventListener['storage'] === 'function')
@@ -123,7 +123,7 @@ describe('react-entanglement-web-storage-adapter', () => {
       })
     })
 
-    describe('onRender', () => {
+    describe('addRenderListener', () => {
       const storageStub = getStorageStub()
       const windowStub = getWindowStub()
       const theAdapter = adapter('app', storageStub, windowStub)
@@ -132,7 +132,7 @@ describe('react-entanglement-web-storage-adapter', () => {
         self.handlerNames = handlerNames
       }
 
-      const deListener = theAdapter.onRender('component', handler)
+      const deListener = theAdapter.materializer.addRenderListener('component', handler)
 
       it('sets up a listener', () => {
         ok(typeof windowStub.addEventListener['storage'] === 'function')
@@ -163,7 +163,7 @@ describe('react-entanglement-web-storage-adapter', () => {
           self.handlerNames = handlerNames
         }
 
-        theAdapter.onRender('component', handler)
+        theAdapter.materializer.addRenderListener('component', handler)
 
         it('runs the callback with data and handlerNames from storage', () => {
           deepEqual(handler.data, { the: 'data' })
@@ -199,7 +199,7 @@ describe('react-entanglement-web-storage-adapter', () => {
       it('sets the storage for the component with handle and the handlerName as key and the args and current timestamp as values', () => {
         const args = { the: 'args' }
         const timestamp = (new Date()).getTime()
-        theAdapter.handle('new-component', 'onTouch', args)
+        theAdapter.materializer.handle('new-component', 'onTouch', args)
 
         const parsedData = JSON.parse(storageStub.setItem['other-app:handle:new-component:onTouch'])
 

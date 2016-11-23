@@ -7,66 +7,66 @@ export default (prefix, storage = window.localStorage, w = window) => {
   const off = w.removeEventListener.bind(w, 'storage')
 
   return {
-    // <Scatter>
-    unmount: (componentName) => remove(key('render', componentName)),
+    scatterer: {
+      unmount: (componentName) => remove(key('render', componentName)),
 
-    render: (componentName, data, handlerNames) => set(
-      key('render', componentName),
-      { data, handlerNames }
-    ),
+      render: (componentName, data, handlerNames) => set(
+        key('render', componentName),
+        { data, handlerNames }
+      ),
 
-    onHandle: (componentName, handlerName, callback) => {
-      const listener = (e) =>
+      addHandlerListener: (componentName, handlerName, callback) => {
+        const listener = (e) =>
         e.key === key('handle', `${componentName}:${handlerName}`) &&
         e.newValue != null &&
         callback(JSON.parse(e.newValue).args)
 
-      on(listener)
-      return () => off(listener)
+        on(listener)
+        return () => off(listener)
+      }
     },
-    // </Scatter>
 
-    // <Materialize>
-    onUnmount: (componentName, callback) => {
-      const listener = (e) =>
+    materializer: {
+      addUnmountListener: (componentName, callback) => {
+        const listener = (e) =>
         e.key === key('render', componentName) &&
         e.newValue == null &&
         callback()
 
-      on(listener)
-      return () => off(listener)
-    },
+        on(listener)
+        return () => off(listener)
+      },
 
-    onRender: (componentName, callback) => {
-      // Render immediately if necessary
-      if (get(key('render', componentName)) != null) {
-        const { data, handlerNames } = JSON.parse(
-          get(key('render', componentName))
-        )
-
-        callback(data, handlerNames)
-      }
-
-      const listener = (e) => {
-        if (
-          e.key === key('render', componentName) &&
-          e.newValue != null
-        ) {
-          const { data, handlerNames } = JSON.parse(e.newValue)
+      addRenderListener: (componentName, callback) => {
+        // Render immediately if necessary
+        if (get(key('render', componentName)) != null) {
+          const { data, handlerNames } = JSON.parse(
+            get(key('render', componentName))
+          )
 
           callback(data, handlerNames)
         }
-      }
 
-      on(listener)
-      return () => off(listener)
-    },
+        const listener = (e) => {
+          if (
+            e.key === key('render', componentName) &&
+            e.newValue != null
+          ) {
+            const { data, handlerNames } = JSON.parse(e.newValue)
 
-    handle: (componentName, handlerName, args) =>
-      set(key('handle', `${componentName}:${handlerName}`), {
-        args,
-        time: new Date().getTime()
-      })
-    // </Materialize>
+            callback(data, handlerNames)
+          }
+        }
+
+        on(listener)
+        return () => off(listener)
+      },
+
+      handle: (componentName, handlerName, args) =>
+        set(key('handle', `${componentName}:${handlerName}`), {
+          args,
+          time: new Date().getTime()
+        })
+    }
   }
 }

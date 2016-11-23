@@ -1,6 +1,8 @@
 import React from 'react'
-import { Scatter } from 'react-entanglement'
+import Entanglement from 'react-entanglement'
 import MagicForm from './MagicForm'
+
+const ScatteredMagicForm = Entanglement.scatter({ name: 'MagicForm' })
 
 export default function DiceApp ({ value, local, onThrow, onToggle }) {
   const formProps = {
@@ -17,7 +19,7 @@ export default function DiceApp ({ value, local, onThrow, onToggle }) {
       {
         local
           ? <MagicForm {...formProps} />
-          : <Scatter name='MagicForm' props={formProps} />
+          : <ScatteredMagicForm {...formProps} />
       }
 
       <p>

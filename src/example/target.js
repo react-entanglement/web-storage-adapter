@@ -1,14 +1,17 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Materialize } from 'react-entanglement'
+import Entanglement from 'react-entanglement'
 import adapter from '../index'
 import MagicForm from './components/MagicForm'
 
+const MaterializedMagicForm = Entanglement.materialize({
+  name: 'MagicForm',
+  constructor: MagicForm
+})
+
 render(
-  <Materialize
-    name='MagicForm'
-    component={MagicForm}
-    adapter={adapter('web-storage-adapter-demo')}
-  />
+  <Entanglement adapter={adapter('web-storage-adapter-demo')}>
+    <MaterializedMagicForm />
+  </Entanglement>
   , document.getElementById('main')
 )
